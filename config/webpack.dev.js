@@ -2,7 +2,8 @@ const path = require('path')
 const uglify = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const extractTextPlugin = require('extract-text-webpack-plugin')
-
+const glob = require('glob');//需要同步检查html模板，所以我们需要引入node的glob对象使用
+const PurifyCSSPlugin = require("purifycss-webpack");
 var website = {
   publicPath:"http://localhost:8890/"
 }
@@ -97,7 +98,11 @@ module.exports = {
         hash:true, //为了开发中js有缓存效果，所以加入hash，这样可以有效避免缓存JS。
         template:'./src/index.html' //是要打包的html模版路径和文件名称。
     }),
-    new extractTextPlugin('css/index.css') //这里的、css/index.css是分离后的路径
+    new extractTextPlugin('css/index.css'), //这里的、css/index.css是分离后的路径
+    new PurifyCSSPlugin({
+      //这里配置了一个paths，主要是需找html模板，purifycss根据这个配置会遍历你的文件，查找哪些css被使用了。
+      paths: glob.sync(path.join(__dirname, 'src/*.html')),
+    })
   ],
   //配置webpack开发服务功能
   devServer: {
