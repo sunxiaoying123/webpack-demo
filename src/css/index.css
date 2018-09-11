@@ -1,0 +1,10 @@
+body{
+  background-color: #fff;
+  color: blue;
+}
+.img{
+  background-image: url('../images/test.jpg');
+  width: 100%;
+  height: 590px;
+  background-size: 100% 590px;
+}
